@@ -113,6 +113,7 @@ func TestMakeSessionCookie(t *testing.T) {
 				HttpOnly: true,
 				Secure:   true,
 				Expires:  now.Add(expiration),
+				SameSite: http.SameSiteNoneMode,
 			},
 		},
 		{
@@ -131,6 +132,7 @@ func TestMakeSessionCookie(t *testing.T) {
 				HttpOnly: true,
 				Secure:   true,
 				Expires:  now.Add(expiration),
+				SameSite: http.SameSiteNoneMode,
 			},
 		},
 	}
@@ -168,6 +170,7 @@ func TestMakeSessionCSRFCookie(t *testing.T) {
 				HttpOnly: true,
 				Secure:   true,
 				Expires:  now.Add(expiration),
+				SameSite: http.SameSiteNoneMode,
 			},
 		},
 		{
@@ -186,6 +189,7 @@ func TestMakeSessionCSRFCookie(t *testing.T) {
 				HttpOnly: true,
 				Secure:   true,
 				Expires:  now.Add(expiration),
+				SameSite: http.SameSiteNoneMode,
 			},
 		},
 	}

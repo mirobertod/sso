@@ -79,7 +79,7 @@ func NewCookieStore(cookieName string, optFuncs ...func(*CookieStore) error) (*C
 	return c, nil
 }
 
-func (s *CookieStore) makeCookie(req *http.Request, name string, value string, expiration time.Duration, now time.Time) *http.Cookie {
+func (s *CookieStore) makeCookie(req *http.Request, name string, value string, expiration time.Duration, now time.Time, sameSite http.SameSite) *http.Cookie {
 	logger := log.NewLogEntry()
 	domain := req.Host
 	if h, _, err := net.SplitHostPort(domain); err == nil {
@@ -100,17 +100,18 @@ func (s *CookieStore) makeCookie(req *http.Request, name string, value string, e
 		HttpOnly: s.CookieHTTPOnly,
 		Secure:   s.CookieSecure,
 		Expires:  now.Add(expiration),
+		SameSite: sameSite,
 	}
 }
 
 // makeSessionCookie constructs a session cookie given the request, an expiration time and the current time.
 func (s *CookieStore) makeSessionCookie(req *http.Request, value string, expiration time.Duration, now time.Time) *http.Cookie {
-	return s.makeCookie(req, s.Name, value, expiration, now)
+	return s.makeCookie(req, s.Name, value, expiration, now, http.SameSiteNoneMode)
 }
 
 // makeCSRFCookie creates a CSRF cookie given the request, an expiration time, and the current time.
 func (s *CookieStore) makeCSRFCookie(req *http.Request, value string, expiration time.Duration, now time.Time) *http.Cookie {
-	return s.makeCookie(req, s.CSRFCookieName, value, expiration, now)
+	return s.makeCookie(req, s.CSRFCookieName, value, expiration, now, http.SameSiteNoneMode)
 }
 
 // ClearCSRF clears the CSRF cookie from the request

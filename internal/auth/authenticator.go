@@ -81,9 +81,11 @@ func NewAuthenticator(config Configuration, optionFuncs ...func(*Authenticator) 
 	}
 
 	headerOverrides := make(map[string]string)
-	err := json.Unmarshal([]byte(config.ServerConfig.Headers), &headerOverrides)
-	if err != nil {
-		return nil, err
+	if config.ServerConfig.Headers != "" {
+		err := json.Unmarshal([]byte(config.ServerConfig.Headers), &headerOverrides)
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	p := &Authenticator{
