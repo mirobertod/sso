@@ -34,6 +34,10 @@ func setHeaders(h http.Handler, headers map[string]string) http.Handler {
 }
 
 func setSecurityHeadersWithOverrides(h http.Handler, headerOverrides map[string]string) http.Handler {
+	if len(headerOverrides) == 0 {
+		return setHeaders(h, securityHeaders)
+	}
+
 	headers := make(map[string]string)
 	for k, v := range securityHeaders {
 		if val, ok := headerOverrides[k]; ok {

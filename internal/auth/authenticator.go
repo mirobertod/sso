@@ -80,21 +80,13 @@ func NewAuthenticator(config Configuration, optionFuncs ...func(*Authenticator) 
 		proxyRootDomains = append(proxyRootDomains, domain)
 	}
 
-	headerOverrides := make(map[string]string)
-	if config.ServerConfig.Headers != "" {
-		err := json.Unmarshal([]byte(config.ServerConfig.Headers), &headerOverrides)
-		if err != nil {
-			return nil, err
-		}
-	}
-
 	p := &Authenticator{
 		ProxyClientID:           config.ClientConfigs["proxy"].ID,
 		ProxyClientSecret:       config.ClientConfigs["proxy"].Secret,
 		EmailDomains:            config.AuthorizeConfig.EmailConfig.Domains,
 		Host:                    config.ServerConfig.Host,
 		Scheme:                  config.ServerConfig.Scheme,
-		SecurityHeaderOverrides: headerOverrides,
+		SecurityHeaderOverrides: config.ServerConfig.ParsedHeaderOverrides,
 
 		ProxyRootDomains: proxyRootDomains,
 		templates:        templates,
